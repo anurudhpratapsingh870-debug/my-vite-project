@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Student Dashboard</h2>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>Welcome, {{ student.name }}!</h4>
+    </div>
+    <div class="card-body">
+        <p><strong>Email:</strong> {{ student.email }}</p>
+        <p><strong>Roll Number:</strong> {{ student.roll_number }}</p>
+        <p><strong>Department:</strong> {{ student.department }}</p>
+        <p><strong>CGPA:</strong> {{ student.cgpa }}</p>
+        <a href="{{ url_for('edit_profile') }}" class="btn btn-primary">Edit Profile</a>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>Available Placement Drives</h4>
+    </div>
+    <div class="card-body">
+        {% if drives %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Company</th>
+                        <th>Deadline</th>
+                        <th>Eligibility</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for drive in drives %}
+                        <tr>
+                            <td>{{ drive.job_title }}</td>
+                            <td>{{ drive.company.name }}</td>
+                            <td>{{ drive.application_deadline.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ drive.eligibility_criteria[:50] }}{% if drive.eligibility_criteria|length > 50 %}...{% endif %}</td>
+                            <td>
+                                <a href="{{ url_for('apply_for_drive', drive_id=drive.id) }}" class="btn btn-sm btn-success">Apply Now</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No placement drives available at the moment.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>Your Applications</h4>
+    </div>
+    <div class="card-body">
+        {% if applications %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Company</th>
+                        <th>Application Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in applications %}
+                        <tr>
+                            <td>{{ app.drive.job_title }}</td>
+                            <td>{{ app.drive.company.name }}</td>
+                            <td>{{ app.application_date.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                {% if app.status == 'Applied' %}
+                                    <span class="badge bg-info">Applied</span>
+                                {% elif app.status == 'Shortlisted' %}
+                                    <span class="badge bg-warning">Shortlisted</span>
+                                {% elif app.status == 'Selected' %}
+                                    <span class="badge bg-success">Selected</span>
+                                {% elif app.status == 'Rejected' %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You haven't applied to any drives yet.</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Placement History</h4>
+    </div>
+    <div class="card-body">
+        {% if placement_history %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Company</th>
+                        <th>Selection Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in placement_history %}
+                        <tr>
+                            <td>{{ app.drive.job_title }}</td>
+                            <td>{{ app.drive.company.name }}</td>
+                            <td>{{ app.application_date.strftime('%Y-%m-%d') }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No placement history yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

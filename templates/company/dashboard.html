@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Company Dashboard</h2>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h4>Your Company Details</h4>
+    </div>
+    <div class="card-body">
+        <p><strong>Name:</strong> {{ company.name }}</p>
+        <p><strong>HR Contact:</strong> {{ company.hr_contact }}</p>
+        <p><strong>Website:</strong> {{ company.website }}</p>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <a href="{{ url_for('create_drive') }}" class="btn btn-primary">Create New Placement Drive</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Your Placement Drives</h4>
+    </div>
+    <div class="card-body">
+        {% if drive_stats %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>Applicants</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in drive_stats %}
+                        <tr>
+                            <td>{{ stat.drive.job_title }}</td>
+                            <td>{{ stat.drive.application_deadline.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                {% if stat.drive.status == 'Pending' %}
+                                    <span class="badge bg-warning">Pending Approval</span>
+                                {% elif stat.drive.status == 'Approved' %}
+                                    <span class="badge bg-success">Approved</span>
+                                {% elif stat.drive.status == 'Closed' %}
+                                    <span class="badge bg-secondary">Closed</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ stat.applicant_count }}</td>
+                            <td>
+                                <a href="{{ url_for('drive_applicants', drive_id=stat.drive.id) }}" class="btn btn-sm btn-info">View Applicants</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>You haven't created any placement drives yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

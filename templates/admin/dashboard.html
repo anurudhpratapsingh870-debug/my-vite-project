@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Students</h5>
+                <h3>{{ total_students }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Companies</h5>
+                <h3>{{ total_companies }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Drives</h5>
+                <h3>{{ total_drives }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h5 class="card-title">Total Applications</h5>
+                <h3>{{ total_applications }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Pending Company Registrations</h4>
+            </div>
+            <div class="card-body">
+                {% if pending_companies %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Company Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in pending_companies %}
+                                {% set company = user.company.first() %}
+                                <tr>
+                                    <td>{{ user.username }}</td>
+                                    <td>{{ company.name }}</td>
+                                    <td>
+                                        <a href="{{ url_for('approve_company', user_id=user.id) }}" class="btn btn-sm btn-success">Approve</a>
+                                        <a href="{{ url_for('reject_company', user_id=user.id) }}" class="btn btn-sm btn-danger">Reject</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No pending company registrations</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Pending Placement Drives</h4>
+            </div>
+            <div class="card-body">
+                {% if pending_drives %}
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Company</th>
+                                <th>Deadline</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for drive in pending_drives %}
+                                <tr>
+                                    <td>{{ drive.job_title }}</td>
+                                    <td>{{ drive.company.name }}</td>
+                                    <td>{{ drive.application_deadline.strftime('%Y-%m-%d') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('approve_drive', drive_id=drive.id) }}" class="btn btn-sm btn-success">Approve</a>
+                                        <a href="{{ url_for('reject_drive', drive_id=drive.id) }}" class="btn btn-sm btn-danger">Reject</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No pending placement drives</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="jumbotron text-center">
+            <h1 class="display-4">Welcome to Placement Portal</h1>
+            <p class="lead">Connect students with top companies for placement opportunities</p>
+            <hr class="my-4">
+            <p>Select your role to get started:</p>
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Student</h5>
+                            <p class="card-text">Register, apply for jobs, and track your applications</p>
+                            <a href="{{ url_for('student_register') }}" class="btn btn-primary">Register</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Company</h5>
+                            <p class="card-text">Register, post jobs, and find talented candidates</p>
+                            <a href="{{ url_for('company_register') }}" class="btn btn-success">Register</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Admin</h5>
+                            <p class="card-text">Manage users, approve companies and placement drives</p>
+                            <a href="{{ url_for('login') }}" class="btn btn-warning">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
