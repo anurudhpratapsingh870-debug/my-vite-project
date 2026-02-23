@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Applicants for {{ drive.job_title }}</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h5>{{ drive.job_title }}</h5>
+        <p><strong>Company:</strong> {{ drive.company.name }}</p>
+        <p><strong>Deadline:</strong> {{ drive.application_deadline.strftime('%Y-%m-%d') }}</p>
+        <p><strong>Status:</strong> 
+            {% if drive.status == 'Pending' %}
+                <span class="badge bg-warning">Pending Approval</span>
+            {% elif drive.status == 'Approved' %}
+                <span class="badge bg-success">Approved</span>
+            {% elif drive.status == 'Closed' %}
+                <span class="badge bg-secondary">Closed</span>
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h4>Applicants List</h4>
+    </div>
+    <div class="card-body">
+        {% if students %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Email</th>
+                        <th>Department</th>
+                        <th>CGPA</th>
+                        <th>Application Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in students %}
+                        <tr>
+                            <td>{{ item.student.name }}</td>
+                            <td>{{ item.student.email }}</td>
+                            <td>{{ item.student.department }}</td>
+                            <td>{{ item.student.cgpa }}</td>
+                            <td>{{ item.application.application_date.strftime('%Y-%m-%d') }}</td>
+                            <td>
+                                {% if item.application.status == 'Applied' %}
+                                    <span class="badge bg-info">Applied</span>
+                                {% elif item.application.status == 'Shortlisted' %}
+                                    <span class="badge bg-warning">Shortlisted</span>
+                                {% elif item.application.status == 'Selected' %}
+                                    <span class="badge bg-success">Selected</span>
+                                {% elif item.application.status == 'Rejected' %}
+                                    <span class="badge bg-danger">Rejected</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" id="statusDropdown" data-bs-toggle="dropdown">
+                                        Update Status
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="{{ url_for('update_application_status', app_id=item.application.id, status='Applied') }}">Applied</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('update_application_status', app_id=item.application.id, status='Shortlisted') }}">Shortlisted</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('update_application_status', app_id=item.application.id, status='Selected') }}">Selected</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('update_application_status', app_id=item.application.id, status='Rejected') }}">Rejected</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No applicants for this drive yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
