@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -76,8 +78,8 @@
   --chart-4: 271 81% 56%;
   --chart-5: 16 82% 50%;
 
-  --font-sans: Inter, sans-serif;
-  --font-serif: Georgia, serif;
+  --font-sans: "Inter", sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
   --font-mono: Menlo, monospace;
   --radius: .5rem; /* 8px */
   --shadow-2xs: 0px 1px 2px 0px hsl(220 13% 91% / 0.05);
